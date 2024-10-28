@@ -19,7 +19,7 @@ MAPA_CORES = {
 
 # Tamanho de cada célula no mapa
 TAMANHO_CELULA = 24
-ATRASO_MOVIMENTO = 50  # Atraso de movimento em milissegundos
+ATRASO_MOVIMENTO = 0  # Atraso de movimento em milissegundos
 
 # Função para carregar o mapa de um arquivo .txt
 def carregar_mapa(arquivo):
