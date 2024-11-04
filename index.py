@@ -19,7 +19,7 @@ MAPA_CORES = {
 
 # Tamanho de cada célula no mapa
 TAMANHO_CELULA = 24
-ATRASO_MOVIMENTO = 0  # Atraso de movimento em milissegundos
+ATRASO_MOVIMENTO = 10  # Atraso de movimento em milissegundos
 
 # Função para carregar o mapa de um arquivo .txt
 def carregar_mapa(arquivo):
@@ -71,7 +71,6 @@ for amigo in POSICOES_AMIGOS:
 
 tela = pygame.display.set_mode((LARGURA_JANELA, ALTURA_JANELA))
 pygame.display.set_caption("Mundo da Barbie")
-# clock = pygame.time.Clock()
 
 # Classe Agente para Barbie
 class AgenteBarbie:
@@ -81,6 +80,7 @@ class AgenteBarbie:
         self.amigos_convencidos = 0
         self.rota = []
         self.retornando = False
+        self.caminho = []  # Lista para armazenar o caminho percorrido
 
     def mover(self):
         if self.rota:
@@ -110,8 +110,8 @@ class AgenteBarbie:
                     self.procurar_proximo_amigo()
                     return  # Impede que a Barbie mude a posição se o amigo recusou
 
-
             self.posicao = nova_posicao
+            self.caminho.append(nova_posicao)  # Adiciona nova posição ao caminho
             self.custo_total += custo
             print(f"Movendo para {nova_posicao}, custo: {custo}. Custo total: {self.custo_total}")
 
@@ -206,15 +206,19 @@ def desenhar_mapa(tela, agente, amigos):
             cor = MAPA_CORES.get(custo, (0, 0, 0))
             pygame.draw.rect(tela, cor, pygame.Rect(j * TAMANHO_CELULA, i * TAMANHO_CELULA, TAMANHO_CELULA, TAMANHO_CELULA))
     
-    # Desenhar a posição da Barbie usando a imagem
-    x, y = agente.posicao
-    tela.blit(IMAGEM_BARBIE, (y * TAMANHO_CELULA, x * TAMANHO_CELULA))
-
     # Desenhar os amigos usando suas imagens
     for pos_amigo in amigos:
         indice_amigo = POSICOES_AMIGOS.index(pos_amigo) + 1  # +1 para corresponder ao índice das imagens
         imagem_amigo = IMAGENS_AMIGOS[f'amigo{indice_amigo}']
         tela.blit(imagem_amigo, (pos_amigo[1] * TAMANHO_CELULA, pos_amigo[0] * TAMANHO_CELULA))
+
+    # Desenhar o caminho percorrido pela Barbie
+    for pos in agente.caminho:
+        pygame.draw.rect(tela, (255, 182, 193), pygame.Rect(pos[1] * TAMANHO_CELULA, pos[0] * TAMANHO_CELULA, TAMANHO_CELULA, TAMANHO_CELULA))  # Rosa claro para o caminho
+
+    # Desenhar a posição da Barbie usando a imagem
+    x, y = agente.posicao
+    tela.blit(IMAGEM_BARBIE, (y * TAMANHO_CELULA, x * TAMANHO_CELULA))
 
 # Inicialização da Barbie e amigos
 barbie = AgenteBarbie(POSICAO_BARBIE[:])
@@ -243,7 +247,6 @@ while rodando:
 
     # Controla a velocidade de movimento
     pygame.time.delay(ATRASO_MOVIMENTO)
-
 
 pygame.quit()
 sys.exit()
