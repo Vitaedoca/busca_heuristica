@@ -18,4 +18,4 @@ Siga as instruções abaixo para baixar e executar o projeto.
 Abra o terminal (ou prompt de comando) e clone o repositório usando o seguinte comando:
 
 ```bash
-git clone https://github.com/seu-usuario/mundo-da-barbie.git
+git clone https://github.com/Vitaedoca/busca_heuristica.git
